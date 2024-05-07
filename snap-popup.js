@@ -30,24 +30,23 @@ function loadSnapPopupStyles() {
         transform: translate(-50%, -50%);
         z-index: 1000000000;
         margin: 0;
-        overflow-y: scroll;
         display: grid;
-        justify-items: center;
+        overflow-y: scroll;
         align-items: center;
-        font-family: Monospace;
+        justify-content: center;
+        box-sizing: border-box;
     }
     .snap-popup-base {
-        overflow:hidden;
         z-index: 1000000001;
-        padding: 30px;
+        padding: 20px;
         background-color: #fff;
         border-radius: 25px;
         position: relative;
-        top: 0px;
-        opacity: 1;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.047);
-        animation: aniSnapPopupBase 0.2s ease-in-out;
         margin: 20px;
+        box-sizing: border-box;
+        opacity: 1;
+        animation: aniSnapPopupBase 0.2s ease-in-out;
     }
     @keyframes aniSnapPopupBase {
       0% {
@@ -78,6 +77,7 @@ function loadSnapPopupStyles() {
         color: #000;
         transition: 0.3s;
         border-bottom-left-radius: 25px;
+        border-top-right-radius: 25px;
       }
       .snap-popup-close:hover {
         background-color: #dbdbdb;

@@ -128,7 +128,6 @@ function loadSnapPopupStyles() {
       }
       .snap-footer {
         font-size: 0.9em;
-        text-align: center;
         line-height: 30px;
         color: #808080;
       }

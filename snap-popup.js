@@ -232,6 +232,20 @@ const snap = {
         snapPopupBG.appendChild(snapPopupBase);
         document.body.appendChild(snapPopupBG);
 
+        document.addEventListener('keydown', handleKeyDown);
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                if (okButton) {
+                    okButtonElement.click();
+                    console.log("Ok button clicked");
+                }
+            } else if (event.key === 'Escape') {
+                snap.close();
+                reject("User canceled");
+            }
+        }
+
         return new Promise((resolve) => {
             if (okButton) {
                 let okButtonElement = document.createElement("button");
@@ -269,7 +283,7 @@ const snap = {
         });
     },
     prompt: function (title = "", defaultValue = "", required = false) {
-        return new Promise((resolve,reject) => {
+        return new Promise((resolve, reject) => {
             const promptFieldUniqueId = `${new Date().getTime()}_${Math.floor(Math.random() * 1000)}`;
             this.spark({
                 header: title,
@@ -299,6 +313,8 @@ const snap = {
         } else {
             popup.remove();
         }
+
+        document.removeEventListener('keydown', handleKeyDown);
     },
-    
+
 };

@@ -117,7 +117,8 @@ function loadSnapPopupStyles() {
         color: #000;
         background-color: #fff;
       }
-      .snap-button:focus {
+      .snap-button:focus,
+      .snap-input:focus {
         outline: solid 4px #b1b1b1;
       }
       .snap-button-black {
@@ -140,6 +141,16 @@ function loadSnapPopupStyles() {
       .snap-manual-html {
         font-size: 1em;
         width: 100%;
+      }
+      .snap-input {
+        outline: none;
+        box-sizing: border-box;
+        width: 100%;
+        height: 45px;
+        font-size: 0.9rem;
+        border-radius: 3px;
+        border: 1px solid #e1e1e1;
+        padding: 0px 10px;
       }`;
     return styleELement;
 }
@@ -152,10 +163,12 @@ const snap = {
             type = "",
             autoclose = 0,
             closeButton = true,
-            defaultButton = false,
-            defaultButtonText = "Ok",
+            okButton = false,
+            okButtonText = "Ok",
+            okButtonFunction = null,
             cancelButton = false,
             cancelButtonText = "Cancel",
+            cancelButtonFunction = null,
             footer = "",
             htmlCode = "",
             width = 450,
@@ -193,13 +206,7 @@ const snap = {
             snapPopupBaseContentHTML = `${snapPopupBaseContentHTML}<div class="snap-manual-html snap-top-margin-3">${htmlCode}</div>`;
         }
 
-        if (defaultButton) {
-            snapPopupBaseContentHTML = `${snapPopupBaseContentHTML}<button class="snap-button snap-button-black snap-top-margin-3" snap-btn-val='true'>${defaultButtonText}</button>`;
-        }
-
-        if (cancelButton) {
-            snapPopupBaseContentHTML = `${snapPopupBaseContentHTML}<button class="snap-button snap-button-white snap-top-margin-1" snap-btn-val='false'>${cancelButtonText}</button>`;
-        }
+        snapPopupBaseContentHTML = `${snapPopupBaseContentHTML}<div class="snap-popup-buttons"></div>`;
 
         if (footer != "") {
             snapPopupBaseContentHTML = `${snapPopupBaseContentHTML}<div class="snap-footer snap-top-margin-2">${footer}</div>`;
@@ -225,31 +232,73 @@ const snap = {
         snapPopupBG.appendChild(snapPopupBase);
         document.body.appendChild(snapPopupBG);
 
-        let allBtns = snapPopupBaseContent.getElementsByTagName('button');
-
         return new Promise((resolve) => {
-            for (let index = 0; index < allBtns.length; index++) {
-                let button = allBtns[index];
-                button.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    if (button.hasAttribute("snap-btn-val")) {
-                        var snapBtnVal = button.getAttribute("snap-btn-val");
-                        resolve(snapBtnVal);
-                    } else {
-                        resolve(button.id);
-                    }
-                    snap.close();
-                });
+            if (okButton) {
+                let okButtonElement = document.createElement("button");
+                okButtonElement.innerText = okButtonText;
+                okButtonElement.className = "snap-button snap-button-black snap-top-margin-3";
+
+                if (okButtonFunction == null) {
+                    okButtonElement.addEventListener('click', () => {
+                        this.close();
+                        resolve(true);
+                    });
+                } else {
+                    okButtonElement.addEventListener('click', okButtonFunction);
+                }
+
+                snapPopupBase.getElementsByClassName("snap-popup-buttons")[0].appendChild(okButtonElement);
             }
+
+            if (cancelButton) {
+                let cancelButtonElement = document.createElement("button");
+                cancelButtonElement.innerText = cancelButtonText;
+                cancelButtonElement.className = "snap-button snap-button-white snap-top-margin-1";
+
+                if (cancelButtonFunction == null) {
+                    cancelButtonElement.addEventListener('click', () => {
+                        this.close();
+                        resolve(false);
+                    });
+                } else {
+                    cancelButtonElement.addEventListener('click', cancelButtonFunction);
+                }
+
+                snapPopupBase.getElementsByClassName("snap-popup-buttons")[0].appendChild(cancelButtonElement);
+            }
+        });
+    },
+    prompt: function (title = "", defaultValue = "", required = false) {
+        return new Promise((resolve,reject) => {
+            const promptFieldUniqueId = `${new Date().getTime()}_${Math.floor(Math.random() * 1000)}`;
+            this.spark({
+                header: title,
+                okButton: true,
+                cancelButton: !required,
+                okButtonFunction: () => {
+                    const value = document.getElementById(promptFieldUniqueId).value;
+                    snap.close();
+                    resolve(value);
+                },
+                cancelButtonFunction: () => {
+                    snap.close();
+                    resolve(false);
+                },
+                htmlCode: `<input type="text" class="snap-input snap-top-margin-1" id="${promptFieldUniqueId}" value="${defaultValue}">`
+            });
         });
     },
     close: function (popup = null) {
         document.body.classList.remove('snap-popup-stop-scroll');
-        if (popup == null) {
-            let allSnaps = document.getElementsByClassName("snap-popup-background");
-            allSnaps[allSnaps.length - 1].remove();
+        const snapPopups = document.getElementsByClassName("snap-popup-background");
+        if (!popup) {
+            const lastSnapPopup = snapPopups[snapPopups.length - 1];
+            if (lastSnapPopup) {
+                lastSnapPopup.remove();
+            }
         } else {
             popup.remove();
         }
     },
+    
 };

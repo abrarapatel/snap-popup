@@ -39,7 +39,7 @@ function loadSnapPopupStyles() {
     .snap-popup-base {
         overflow:hidden;
         z-index: 1000000001;
-        padding: 50px;
+        padding: 30px;
         background-color: #fff;
         border-radius: 25px;
         position: relative;
@@ -60,7 +60,7 @@ function loadSnapPopupStyles() {
       }
     }
     .base-content-container {
-        padding: 25px;
+        padding: 15px;
     }
     .snap-popup-close {
         position: absolute;

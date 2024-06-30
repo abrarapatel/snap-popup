@@ -20,7 +20,7 @@ To use Snap Popup, simply include the JavaScript file in your project:
 ```
 ## Way to use
 
-```html
+```javascript
 snap.spark({
     header: "Hello World",
     details: "This is a simple popup example.",

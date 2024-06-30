@@ -16,3 +16,14 @@ To use Snap Popup, simply include the JavaScript file in your project:
 
 ```html
 <script src="path/to/snap-popup.js"></script>
+
+```
+## Way to use
+
+```html
+snap.spark({
+    header: "Hello World",
+    details: "This is a simple popup example.",
+    okButton: true,
+    okButtonText: "Close"
+});

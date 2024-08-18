@@ -172,6 +172,7 @@ const snap = {
             htmlCode = "",
             width = 450,
         } = options;
+        
 
         let iconSVGCode = "";
 
@@ -191,10 +192,6 @@ const snap = {
 
         if (closeButton) {
             snapPopupBaseContentHTML = `${snapPopupBaseContentHTML}<div class="snap-popup-close" onclick="snap.close()"><div>&times;</div></div>`;
-        }
-
-        if (type == "success") {
-            snapPopupBaseContentHTML = `<center><dotlottie-player src="https://lottie.host/0aac02c7-65b1-4a58-94ff-15c2a224a7fa/WwIBZNcHOQ.json" background="transparent" speed="3" style="width: 150px; height: 150px;" autoplay></dotlottie-player></center>`;
         }
 
         if (header != "") {

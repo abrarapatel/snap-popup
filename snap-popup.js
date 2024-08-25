@@ -172,7 +172,7 @@ const snap = {
             htmlCode = "",
             width = 450,
         } = options;
-        
+
 
         let iconSVGCode = "";
 
@@ -214,11 +214,13 @@ const snap = {
 
         snapPopupBaseContent.innerHTML = snapPopupBaseContentHTML;
 
-        snapPopupBG.addEventListener("click", (e) => {
-            if (e.target === snapPopupBG) {
-                this.close();
-            }
-        });
+        if (closeButton) {
+            snapPopupBG.addEventListener("click", (e) => {
+                if (e.target === snapPopupBG) {
+                    this.close();
+                }
+            });
+        }
 
         if (autoclose > 0) {
             const animationSpeed = autoclose / 100;
